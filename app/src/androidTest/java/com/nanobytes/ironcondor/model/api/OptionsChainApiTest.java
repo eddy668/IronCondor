@@ -11,8 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class TdAmeritradeApiTest {
+public class OptionsChainApiTest {
 
     @Rule
     public RetryTest retry = new RetryTest(3);
@@ -41,7 +39,7 @@ public class TdAmeritradeApiTest {
         server.start();
 
         OptionsChain chain = new OptionsChain("amd");
-        TdAmeritradeApi options_api = new TdAmeritradeApi(server.url("").toString());
+        OptionsChainApi options_api = new OptionsChainApi(server.url("").toString());
         options_api.get_options_chain(chain);
 
         options_api.wait_until_done();
@@ -68,7 +66,7 @@ public class TdAmeritradeApiTest {
     public void will_pull_chain_from_unmocked_server() {
         OptionsChain chain = new OptionsChain("amd");
 
-        TdAmeritradeApi options_api = new TdAmeritradeApi();
+        OptionsChainApi options_api = new OptionsChainApi();
         options_api.get_options_chain(chain);
 
         options_api.wait_until_done();

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.nanobytes.ironcondor.model.OptionsChain;
 import com.nanobytes.ironcondor.service.HttpService;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,21 +17,20 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class TdAmeritradeApi extends BaseHttpApi {
+public class OptionsChainApi extends BaseHttpApi {
     private String api_url;
 
-    public TdAmeritradeApi(String url) {
+    public OptionsChainApi(String url) {
         this.api_url = url;
     }
 
-    public TdAmeritradeApi() {
+    public OptionsChainApi() {
         this("https://api.tdameritrade.com/v1/marketdata/chains?apikey=EXJ0IKLVL062E92L9JEAZX4LNOGQBE7F&symbol=AMD&strikeCount=20&toDate="+get_next_weekly_expiration());
     }
 
