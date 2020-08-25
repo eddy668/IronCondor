@@ -59,4 +59,9 @@ public class IronCondorTest {
         assertEquals(451.0, condor.max_roi(100), 0.01);
         assertEquals(410.0, condor.max_roi(50), 0.01);
     }
+
+    @Test
+    public void can_calculate_wiggle_room() {
+        assertEquals(451.0, condor.get_wiggle_room(), 0.01);
+    }
 }

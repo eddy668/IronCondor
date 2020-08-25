@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class OptionsChainApiTest {
+public class OptionsChainApiTest extends UsesMockInputData{
 
     @Rule
     public RetryTest retry = new RetryTest(3);
@@ -32,7 +32,7 @@ public class OptionsChainApiTest {
     public void can_pull_metrics_from_mocked_server() throws IOException {
         MockWebServer server = new MockWebServer();
         ClassLoader classLoader = getClass().getClassLoader();
-        InputStream mock_json = this.getClass().getClassLoader().getResourceAsStream("tdameritrade.json");;
+        InputStream mock_json = this.getClass().getClassLoader().getResourceAsStream("options_chain.json");;
 
         String message_body = open_input_file(mock_json);
         server.enqueue(new MockResponse().setBody(message_body));
@@ -76,23 +76,5 @@ public class OptionsChainApiTest {
         assertTrue("Could not get call chain", chain.call_values.size() > 0);
         assertTrue("Could not get put chain", chain.put_values.size() > 0);
         assertTrue("The options chains are not the same size", chain.call_values.size() == chain.put_values.size());
-    }
-
-    private static String open_input_file(final InputStream input_stream) throws IOException {
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(input_stream));
-
-        final StringBuilder stringBuilder = new StringBuilder();
-        boolean done = false;
-        while (!done) {
-            final String line = reader.readLine();
-            done = (line == null);
-
-            if (line != null) stringBuilder.append(line);
-        }
-
-        reader.close();
-        input_stream.close();
-
-        return stringBuilder.toString();
     }
 }

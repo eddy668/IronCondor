@@ -15,6 +15,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -31,12 +32,12 @@ public class OptionsChainApi extends BaseHttpApi {
     }
 
     public OptionsChainApi() {
-        this("https://api.tdameritrade.com/v1/marketdata/chains?apikey=EXJ0IKLVL062E92L9JEAZX4LNOGQBE7F&symbol=AMD&strikeCount=20&toDate="+get_next_weekly_expiration());
+        this("https://api.tdameritrade.com/v1/marketdata/chains?apikey=EXJ0IKLVL062E92L9JEAZX4LNOGQBE7F&strikeCount=40&toDate="+get_next_weekly_expiration()+"&symbol=");
     }
 
     public void get_options_chain(final OptionsChain chain) {
         started_a_process();
-        HttpService.send_get_request(api_url + chain.ticker, new Callback() {
+        HttpService.send_get_request(api_url + chain.ticker.toUpperCase(), new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 could_not_contact_tdameritrade(chain);
@@ -52,7 +53,7 @@ public class OptionsChainApi extends BaseHttpApi {
     }
 
     private void could_not_contact_tdameritrade(OptionsChain chain) {
-        Log.e("TdAmeritradeApi", "Could not receive response from server.");
+        Log.e("OptionsChainApi", "Could not receive response from server.");
         reset_chain(chain);
     }
 
@@ -61,7 +62,7 @@ public class OptionsChainApi extends BaseHttpApi {
             String response_body = Objects.requireNonNull(response.body()).string();
             parse_json_response(response_body, chain);
         } catch (IOException | JSONException e) {
-            Log.e("CoinGeckoApi", "Could not parse JSON from CoinGecko", e);
+            Log.e("OptionsChainApi", "Could not parse JSON from CoinGecko", e);
             reset_chain(chain);
         }
     }

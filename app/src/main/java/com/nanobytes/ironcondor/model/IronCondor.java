@@ -1,5 +1,6 @@
 package com.nanobytes.ironcondor.model;
 
+import android.util.Log;
 import android.util.Pair;
 
 public class IronCondor {
@@ -17,7 +18,7 @@ public class IronCondor {
     }
 
     public double required_collateral() {
-        return Math.max(buy_call_option.first-sell_call_option.first, sell_put_option.first-buy_put_option.first)*100;
+        return Math.max(sell_call_option.first-buy_call_option.first, sell_put_option.first-buy_put_option.first)*100;
     }
 
     public double regular_roi() {
@@ -25,12 +26,19 @@ public class IronCondor {
     }
 
     public long largest_order_size(double buying_power) {
+        double collateral = required_collateral();
+        double premieum = available_premium();
         long original_contracts_available = Math.round(buying_power / required_collateral());
         double original_premium_obtained = original_contracts_available * available_premium();
         double left_over_cash = buying_power - original_contracts_available*required_collateral();
 
         if(original_contracts_available > 0) {
-            return original_contracts_available + largest_order_size(original_premium_obtained + left_over_cash);
+            try {
+                return original_contracts_available + largest_order_size(original_premium_obtained + left_over_cash);
+            } catch (Exception e) {
+                Log.e("IronCondor", "StackOverFLowError", e);
+                return 0;
+            }
         } else {
             if(left_over_cash + available_premium() >= required_collateral()) {
                 return 1 + largest_order_size(buying_power+available_premium()-required_collateral());
@@ -46,6 +54,12 @@ public class IronCondor {
 
     public double max_roi(double buying_power) {
         return Math.round(max_gains(buying_power)/buying_power*100);
+    }
+
+    public Pair<Double, Double> get_wiggle_room() {
+        double upper_margin = Math.round((sell_call_option.first-underlying_price)/underlying_price*100);
+        double lower_margin = Math.round((underlying_price-sell_put_option.first)/underlying_price*100);
+        return new Pair<>(upper_margin, lower_margin);
     }
 
     @Override

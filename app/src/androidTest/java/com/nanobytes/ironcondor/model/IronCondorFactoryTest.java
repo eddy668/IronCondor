@@ -34,7 +34,7 @@ public class IronCondorFactoryTest {
     @Test
     public void WillGenerateCondorsWithValidChain() {
         IronCondorFactory factory = new IronCondorFactory(this.chain);
-        List<IronCondor> condors = factory.generate_condors_from_chain();
+        List<IronCondor> condors = factory.generate_condors_from_chain(1);
 
         assertEquals(3, condors.size());
     }
